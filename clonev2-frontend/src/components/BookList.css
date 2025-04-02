@@ -1,0 +1,66 @@
+.booklist-wrapper {
+    padding: 2rem;
+    background-color: #f2f2f2;
+    min-height: 100vh;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.75rem;
+    margin: 0 auto 1rem auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.clear-search {
+    display: block;
+    margin: 0.5rem auto 2rem auto;
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.booklist-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.book-card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease-in-out;
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-card p {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+}
+
+mark {
+    background-color: yellow;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+
