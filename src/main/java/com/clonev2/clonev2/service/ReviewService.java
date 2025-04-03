@@ -27,7 +27,8 @@ public class ReviewService {
 
     public Review createReview(String slug, Review review) {
         Optional<Book> bookOpt = bookRepo.findBySlug(slug);
-        if (bookOpt.isEmpty()) throw new RuntimeException("Book not found");
+        if (bookOpt.isEmpty()) throw new IllegalArgumentException("Book not found");
+
 
         review.setBook(bookOpt.get());
         review.setCreatedAt(LocalDateTime.now());

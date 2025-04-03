@@ -6,9 +6,9 @@ function LibraryWall({ books }) {
     const [user, setUser] = useState(null);
     const [userPosts, setUserPosts] = useState([]);
     const [posts, setPosts] = useState([]);
-    const [author, setAuthor] = useState('');
     const [content, setContent] = useState('');
     const [comments, setComments] = useState({});
+    const [commentInputs, setCommentInputs] = useState({});
 
     useEffect(() => {
         const stored = localStorage.getItem('user');
@@ -17,28 +17,19 @@ function LibraryWall({ books }) {
             setUser(parsed);
 
             fetch('/api/posts')
-                .then(res => {
-                    if (!res.ok) throw new Error('Failed to fetch posts');
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(data => {
-                    console.log('Fetched posts:', data); // 👀 make sure this is an array
-                    if (Array.isArray(data)) {
-                        setPosts(data);
-                        const filtered = data.filter(post => post.author === parsed.displayName);
-                        setUserPosts(filtered);
-                    } else {
-                        console.error('Expected an array but got:', data);
-                    }
+                    setPosts(data);
+                    const filtered = data.filter(post => post.author === parsed.displayName);
+                    setUserPosts(filtered);
                 })
-                .catch(err => {
-                    console.error('Post fetch error:', err);
-                });
+                .catch(err => console.error('Post fetch error:', err));
         }
     }, []);
+
     const submitPost = (e) => {
         e.preventDefault();
-        const post = { author, content };
+        const post = { author: user.displayName, content };
 
         fetch('/api/posts', {
             method: 'POST',
@@ -58,21 +49,46 @@ function LibraryWall({ books }) {
             .then(updatedPost => {
                 setPosts(prevPosts =>
                     prevPosts.map(post =>
-                        post.id === postId
-                            ? { ...post, likes: updatedPost.likes }
-                            : post
+                        post.id === postId ? { ...post, likes: updatedPost.likes } : post
                     )
                 );
             });
     };
-
-
 
     const toggleComments = (postId) => {
         if (comments[postId]) return;
         fetch(`/api/posts/${postId}/comments`)
             .then(res => res.json())
             .then(data => setComments(prev => ({ ...prev, [postId]: data })));
+    };
+
+    const handleCommentChange = (postId, value) => {
+        setCommentInputs(prev => ({ ...prev, [postId]: value }));
+    };
+
+    const submitComment = (postId) => {
+        const content = commentInputs[postId];
+        if (!content) return;
+
+        const commentData = {
+            commenter: user.displayName,
+            content,
+        };
+
+        fetch(`/api/comments/${postId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(commentData),
+        })
+            .then(res => res.json())
+            .then(() => {
+                fetch(`/api/posts/${postId}/comments`)
+                    .then(res => res.json())
+                    .then(data => {
+                        setComments(prev => ({ ...prev, [postId]: data }));
+                        setCommentInputs(prev => ({ ...prev, [postId]: '' }));
+                    });
+            });
     };
 
     const filteredPosts = posts.filter(post =>
@@ -100,17 +116,18 @@ function LibraryWall({ books }) {
     const trending = getTrendingKeywords();
 
     return (
-        <div className="library-wall-wrapper">
-            <div className="library-sidebar">
+        <div className="library-wall-grid">
+            {/* Sidebar */}
+            <div className="wall-sidebar">
                 <input
                     type="text"
                     placeholder="Search posts..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="search-bar"
+                    className="wall-search"
                 />
 
-                {user && (
+                {user ? (
                     <div className="profile-preview">
                         <img
                             src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.username}`}
@@ -124,6 +141,10 @@ function LibraryWall({ books }) {
                         </p>
                         <a href="/profile" className="profile-link">View Full Profile →</a>
                     </div>
+                ) : (
+                    <div className="wall-profile-placeholder">
+                        Please <a href="/login">log in</a> to see your profile.
+                    </div>
                 )}
 
                 <div className="trending-box">
@@ -134,12 +155,13 @@ function LibraryWall({ books }) {
                 </div>
             </div>
 
-            <div className="library-wall-feed">
+            {/* Posts Feed */}
+            <div className="wall-posts-area">
                 {filteredPosts.length === 0 ? (
                     <p>No posts found.</p>
                 ) : (
                     filteredPosts.map(post => (
-                        <div key={post.id} className="post-item">
+                        <div key={post.id} className="wall-post">
                             <p>{post.content}</p>
                             <p className="meta">– {post.author} on {new Date(post.createdAt).toLocaleDateString()}</p>
                             <button className="like-button" onClick={() => handleLike(post.id)}>
@@ -150,22 +172,38 @@ function LibraryWall({ books }) {
                             </button>
                             {comments[post.id]?.map(c => (
                                 <div key={c.id} className="comment">
-                                    <p>{c.text}</p>
-                                    <small>– {c.author}</small>
+                                    <p>{c.content}</p>
+                                    <small>– {c.commenter}</small>
                                 </div>
                             ))}
+
+                            {user && (
+                                <div className="comment-form">
+                                    <textarea
+                                        placeholder="Write a comment..."
+                                        value={commentInputs[post.id] || ''}
+                                        onChange={(e) => handleCommentChange(post.id, e.target.value)}
+                                        className="comment-input"
+                                    />
+                                    <button
+                                        className="comment-submit"
+                                        onClick={() => submitComment(post.id)}
+                                    >
+                                        ➤ Comment
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ))
                 )}
             </div>
 
+            {/* Post Overlay */}
             {user ? (
                 <form onSubmit={submitPost} className="wall-post-overlay">
                     <input
                         type="text"
-                        placeholder="Your name"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
+                        value={user.displayName}
                         className="overlay-name"
                         readOnly
                     />

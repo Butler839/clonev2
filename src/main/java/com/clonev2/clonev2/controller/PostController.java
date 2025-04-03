@@ -2,6 +2,8 @@ package com.clonev2.clonev2.controller;
 
 import com.clonev2.clonev2.model.Post;
 import com.clonev2.clonev2.service.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,20 +19,30 @@ public class PostController {
         this.service = service;
     }
 
+    // ✅ Get all posts
     @GetMapping
-    public List<Post> getAllPosts() {
-        return service.getAllPosts();
+    public ResponseEntity<List<Post>> getAllPosts() {
+        System.out.println("📬 GET /api/posts");
+        List<Post> posts = service.getAllPosts();
+        return ResponseEntity.ok(posts);
     }
 
+    // ✅ Create new post
     @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        return service.createPost(post);
+    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+        Post saved = service.createPost(post);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    // ✅ Like a post
     @PostMapping("/{id}/like")
-    public Post likePost(@PathVariable Long id) {
-        return service.incrementLikes(id);
+    public ResponseEntity<?> likePost(@PathVariable Long id) {
+        try {
+            Post updated = service.incrementLikes(id);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            System.err.println("❌ Failed to like post ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+        }
     }
-
 }
-

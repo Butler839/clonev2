@@ -6,6 +6,8 @@ import LibraryWall from './pages/LibraryWall';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import BookList from './pages/BookList';
+
 
 function App() {
     const [books, setBooks] = useState([]);
@@ -20,6 +22,7 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Homepage books={books} />} />
+            <Route path="/books" element={<BookList />} />
             <Route path="/books/:slug" element={<BookDetail />} />
             <Route path="/library-wall" element={<LibraryWall books={books} />} />
             <Route path="/login" element={<Login />} />

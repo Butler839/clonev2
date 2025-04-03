@@ -30,8 +30,34 @@
     color: #555;
 }
 
+.trending-box {
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+.trending-box h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #333;
+}
+
+.trending-box ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.trending-box li {
+    padding: 0.25rem 0;
+    font-size: 0.95rem;
+    color: #444;
+}
+
 .wall-posts-area {
-    padding-bottom: 6rem; /* for overlay space */
+    padding-bottom: 6rem;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
 }
 
 .wall-post {
@@ -42,22 +68,46 @@
     border: 1px solid #eee;
 }
 
-.wall-post mark {
-    background: yellow;
-    padding: 0 3px;
+.meta {
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.comment {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid #eee;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.like-button,
+.comment-button {
+    margin-right: 1rem;
+    border: none;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.like-button:hover,
+.comment-button:hover {
+    color: #111;
 }
 
 .wall-post-overlay {
     position: fixed;
     bottom: 0;
     left: 250px;
-    right: 0;
-    background: #fff;
+    width: calc(100% - 250px);
+    background: white;
     padding: 1rem;
+    border-top: 1px solid #ccc;
     display: flex;
     gap: 1rem;
-    border-top: 1px solid #ccc;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    z-index: 10;
 }
 
 .overlay-name {
@@ -82,22 +132,6 @@
     padding: 0.6rem 1rem;
     border-radius: 6px;
     cursor: pointer;
-}
-
-.library-wall-wrapper {
-    display: flex;
-    gap: 2rem;
-    padding: 2rem;
-}
-
-.library-sidebar {
-    width: 250px;
-}
-
-.search-bar {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
 }
 
 .profile-preview {

@@ -1,66 +1,137 @@
-import React from 'react';
-import BookList from '../components/BookList';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import './Home.css';
 
-function Homepage() {
+function Homepage({ books }) {
     const [user, setUser] = useState(null);
+    const [recentPosts, setRecentPosts] = useState([]);
+    const [userPosts, setUserPosts] = useState([]);
 
     useEffect(() => {
         const stored = localStorage.getItem('user');
-        if (stored) {
-            setUser(JSON.parse(stored));
-        }
+
+        fetch('/api/posts')
+            .then(res => res.json())
+            .then(data => {
+                console.log("🧪 Post data:", data);
+
+                if (!Array.isArray(data)) throw new Error("Invalid post data");
+
+                const sorted = [...data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                setRecentPosts(sorted.slice(0, 3));
+
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    setUser(parsed);
+                    const userPosts = sorted.filter(p => p.author === parsed.displayName);
+                    setUserPosts(userPosts);
+                }
+            })
+            .catch(err => console.error("Failed to fetch posts:", err));
     }, []);
 
+
     return (
-        <div className="homepage-wrapper">
-            {/* 🗝️ Top-right user or login */}
-            {user ? (
-                <div className="login-button" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                    <Link to="/profile" style={{ color: 'white', textDecoration: 'none' }}>
-                        👤 {user.displayName}
-                    </Link>
-                    <button
-                        onClick={() => {
-                            localStorage.removeItem('user');
-                            setUser(null);
-                            window.location.reload();
-                        }}
-                        style={{
-                            background: 'transparent',
-                            color: 'white',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.9rem'
-                        }}
-                    >
-                        Logout
-                    </button>
+        <div className="homepage-container">
+            <header className="homepage-header">
+                <h1>📚 Requiem Library</h1>
+                <div className="user-controls">
+                    {user ? (
+                        <>
+                            <Link to="/profile" className="profile-link">👤 {user.displayName}</Link>
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem('user');
+                                    setUser(null);
+                                    window.location.reload();
+                                }}
+                                className="logout-button"
+                            >
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <Link to="/login" className="login-button">Login</Link>
+                    )}
                 </div>
-            ) : (
-                <Link to="/login" className="login-button">
-                    Login
-                </Link>
+            </header>
+
+            {/* Library Wall Section */}
+            <div className="section-card">
+                <div className="section-header">
+                    <h2>🗣️ Library Wall</h2>
+                    <Link to="/library-wall" className="view-all-link">→ View All</Link>
+                </div>
+                <div className="post-preview-list">
+                    {recentPosts.map(post => (
+                        <div key={post.id} className="post-preview">
+                            <p className="preview-content">“{post.content.slice(0, 100)}...”</p>
+                            <p className="preview-meta">– {post.author}</p>
+                        </div>
+                    ))}
+                    {recentPosts.length === 0 && <p className="no-preview">No posts yet.</p>}
+                </div>
+            </div>
+
+            {/* Featured Books Section */}
+            <div className="section-card">
+                <div className="section-header">
+                    <h2>📖 Featured Books</h2>
+                    <Link to="/books" className="view-all-link">→ View All</Link>
+                </div>
+                <div className="post-preview-list">
+                    {books.slice(0, 3).map(book => (
+                        <Link
+                            to={`/books/${book.slug}`}
+                            key={book.id}
+                            className="book-preview"
+                        >
+                            <p className="preview-content">“{book.title}”</p>
+                            <p className="preview-meta">by {book.author}</p>
+                        </Link>
+                    ))}
+                    {books.length === 0 && <p className="no-preview">No books available yet.</p>}
+                </div>
+            </div>
+
+            {/* Profile Section */}
+            {user && (
+                <div className="section-card">
+                    <div className="section-header">
+                        <h2>👤 Your Profile</h2>
+                        <Link to="/profile" className="view-all-link">→ View Profile</Link>
+                    </div>
+                    <div className="profile-preview">
+                        <img
+                            src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.username}`}
+                            alt="avatar"
+                            className="avatar"
+                        />
+                        <p><strong>{user.displayName}</strong></p>
+                        <p style={{ fontSize: '0.9rem', color: '#777' }}>{user.username}</p>
+                        <p style={{ fontStyle: 'italic', marginTop: '0.5rem' }}>
+                            🗣️ {userPosts.length} {userPosts.length === 1 ? 'post' : 'posts'}
+                        </p>
+
+                        {userPosts.length > 0 && (
+                            <div className="last-post">
+                                <p style={{ marginTop: '1rem', fontWeight: 'bold' }}>📝 Your Latest Post:</p>
+                                <blockquote className="last-post-content">
+                                    “{userPosts[0].content.slice(0, 100)}...”
+                                </blockquote>
+                            </div>
+                        )}
+                    </div>
+                </div>
             )}
-
-
-            {/* 📬 Top-left link to Library Wall */}
-            <Link to="/library-wall" className="library-wall-link">
-                🗣️ Library Wall
-            </Link>
-
-            <h1 style={{ textAlign: 'center', padding: '1rem' }}>
-                📚 Requiem Library
-            </h1>
-
-            <BookList />
         </div>
     );
 }
 
 export default Homepage;
+
+
+
 
 
 

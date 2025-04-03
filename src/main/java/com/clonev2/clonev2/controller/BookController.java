@@ -2,6 +2,8 @@ package com.clonev2.clonev2.controller;
 
 import com.clonev2.clonev2.model.Book;
 import com.clonev2.clonev2.service.BookService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,25 +20,31 @@ public class BookController {
     }
 
     @GetMapping
-    @ResponseBody
-    public List<Book> getAllBooks() {
-        System.out.println("📚 GET /api/books hit");
-        return service.getAllBooks();
+    public ResponseEntity<List<Book>> getAllBooks() {
+        System.out.println("📚 GET /api/books");
+        List<Book> books = service.getAllBooks();
+        return ResponseEntity.ok(books);
     }
 
-
     @GetMapping("/{slug}")
-    public Book getBookBySlug(@PathVariable String slug) {
-        return service.getBookBySlug(slug).orElse(null);
+    public ResponseEntity<?> getBookBySlug(@PathVariable String slug) {
+        System.out.println("📚 GET /api/books/" + slug);
+        return service.getBookBySlug(slug)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Book not found"));
     }
 
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return service.createBook(book);
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+        Book saved = service.createBook(book);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
+    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+        System.out.println("❌ DELETE /api/books/" + id);
         service.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 }

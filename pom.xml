@@ -56,6 +56,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- For @PostConstruct -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version> <!-- ✅ correct for Spring Boot 3 -->
+        </dependency>
+
 
 
     </dependencies>

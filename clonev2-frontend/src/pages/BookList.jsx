@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import './BookList.css';
 import { Link } from 'react-router-dom';
+import '../components/BookList.css';
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -11,6 +11,17 @@ function BookList() {
             .then((res) => res.json())
             .then((data) => setBooks(data))
             .catch((err) => console.error("Error fetching books:", err));
+    }, []);
+
+    useEffect(() => {
+        const handleKey = (e) => {
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.querySelector('.search-bar')?.focus();
+            }
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
     const filteredBooks = books.filter((book) => {
@@ -24,6 +35,7 @@ function BookList() {
 
     return (
         <div className="booklist-wrapper">
+            <h1 className="booklist-title">📚 Explore the Requiem Library</h1>
 
             {/* 🔍 Search input */}
             <input
@@ -34,14 +46,14 @@ function BookList() {
                 className="search-bar"
             />
 
-            {/* ✨ Clear button (only shows if user typed something) */}
+            {/* ✨ Clear button */}
             {searchTerm && (
                 <button className="clear-search" onClick={() => setSearchTerm('')}>
                     Clear
                 </button>
             )}
 
-            {/* 📚 Book list */}
+            {/* 📚 Book grid */}
             <div className="booklist-container">
                 {filteredBooks.map((book) => (
                     <Link to={`/books/${book.slug}`} key={book.id} className="book-card">
@@ -50,7 +62,7 @@ function BookList() {
                                 __html: book.title.replace(
                                     new RegExp(`(${searchTerm})`, 'gi'),
                                     (match) => `<mark>${match}</mark>`
-                                )
+                                ),
                             }}
                         />
                         <p><strong>Author:</strong> {book.author}</p>
@@ -58,11 +70,14 @@ function BookList() {
                         <p>{book.description.substring(0, 100)}...</p>
                     </Link>
                 ))}
+                {filteredBooks.length === 0 && (
+                    <p className="no-results">No books match your search.</p>
+                )}
             </div>
         </div>
-            );
-
+    );
 }
 
 export default BookList;
+
 

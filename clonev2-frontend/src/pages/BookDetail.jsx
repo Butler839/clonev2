@@ -16,17 +16,23 @@ function BookDetail() {
     useEffect(() => {
         fetch(`/api/books/${slug}`)
             .then((res) => {
+                console.log("BOOK STATUS:", res.status);
                 if (!res.ok) throw new Error('Book not found');
                 return res.json();
             })
             .then((data) => {
+                console.log("BOOK DATA:", data);
                 setBook(data);
                 return fetch(`/api/books/${slug}/reviews`);
             })
             .then((res) => res.json())
             .then(setReviews)
-            .catch(() => setError(true));
+            .catch((err) => {
+                console.error("Book detail fetch error:", err);
+                setError(true);
+            });
     }, [slug]);
+
 
     const handleReviewSubmit = (e) => {
         e.preventDefault();

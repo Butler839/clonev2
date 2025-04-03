@@ -1,50 +1,61 @@
 .booklist-wrapper {
     padding: 2rem;
-    background-color: #f2f2f2;
-    min-height: 100vh;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: system-ui, sans-serif;
+}
+
+.booklist-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #111;
 }
 
 .search-bar {
     width: 100%;
-    max-width: 500px;
-    padding: 0.75rem;
-    margin: 0 auto 1rem auto;
-    display: block;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 0.6rem 1rem;
     font-size: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
 }
 
 .clear-search {
-    display: block;
-    margin: 0.5rem auto 2rem auto;
-    padding: 0.5rem 1rem;
-    background-color: #333;
-    color: white;
+    background: #eee;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    padding: 0.4rem 0.8rem;
     font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.clear-search:hover {
+    background: #ddd;
 }
 
 .booklist-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
+    margin-top: 1rem;
 }
 
 .book-card {
-    background-color: #fff;
+    background: #fdfdfd;
     padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease-in-out;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     text-decoration: none;
     color: inherit;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .book-card:hover {
-    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
 }
 
 .book-card h2 {
@@ -53,14 +64,22 @@
 }
 
 .book-card p {
-    margin: 0.25rem 0;
     font-size: 0.95rem;
+    margin: 0.2rem 0;
+    color: #444;
 }
 
-mark {
+.book-card mark {
     background-color: yellow;
     padding: 0 2px;
-    border-radius: 2px;
+    font-weight: bold;
+}
+
+.no-results {
+    font-style: italic;
+    color: #888;
+    margin-top: 2rem;
+    text-align: center;
 }
 
 
