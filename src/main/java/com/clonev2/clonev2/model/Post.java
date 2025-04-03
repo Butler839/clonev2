@@ -17,9 +17,22 @@ public class Post {
 
     private LocalDateTime createdAt;
 
-    private int likes = 0; // ✅ new field for likes
+    private int likes = 0;
 
-    // Getters and setters
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    // 🔧 Constructors
+    public Post() {
+        // Default constructor for JPA
+    }
+
+    public Post(Long id) {
+        this.id = id;
+    }
+
+    // 🧱 Getters and Setters
     public Long getId() { return id; }
 
     public String getAuthor() { return author; }
@@ -31,6 +44,9 @@ public class Post {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public int getLikes() { return likes; }               // ✅ new getter
-    public void setLikes(int likes) { this.likes = likes; } // ✅ new setter
+    public int getLikes() { return likes; }
+    public void setLikes(int likes) { this.likes = likes; }
+
+    public Book getBook() { return book; }
+    public void setBook(Book book) { this.book = book; }
 }

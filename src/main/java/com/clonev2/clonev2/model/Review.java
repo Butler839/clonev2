@@ -1,6 +1,7 @@
 package com.clonev2.clonev2.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore; // ✅ Add this
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,6 +18,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonIgnore  // ✅ Prevent infinite loop during serialization
     private Book book;
 
     // Getters
