@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ProfileStyles.css';
+import { Link } from 'react-router-dom';
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -46,6 +47,8 @@ function Profile() {
 
     return (
         <div className="profile-container">
+            <Link to="/" className="back-button">← Back to Homepage</Link>
+
             <div className="profile-banner">
                 <img
                     src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.username}`}
@@ -54,6 +57,7 @@ function Profile() {
                 />
                 <h2 className="profile-title">👤 {user.displayName}'s Profile</h2>
             </div>
+
 
             <div className="profile-info">
                 <p><strong>Username:</strong> {user.username}</p>

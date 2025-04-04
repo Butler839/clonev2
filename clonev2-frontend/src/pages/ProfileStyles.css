@@ -101,3 +101,16 @@ body {
     font-size: 0.85rem;
     color: var(--muted);
 }
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.back-button:hover {
+    color: var(--text);
+}

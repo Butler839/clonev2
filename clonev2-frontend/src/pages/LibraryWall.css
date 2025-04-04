@@ -337,3 +337,18 @@ body {
         transform: scale(1);
     }
 }
+
+.back-button {
+    display: inline-block;
+    margin-left: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: -1rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.back-button:hover {
+    color: var(--text);
+}

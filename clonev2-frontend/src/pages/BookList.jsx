@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../components/BookList.css';
+import { filterBooks } from '../utils/bookHelpers';
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -29,14 +30,8 @@ function BookList() {
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
 
-    const filteredBooks = books.filter((book) => {
-        const term = searchTerm.toLowerCase();
-        return (
-            book.title.toLowerCase().includes(term) ||
-            book.author.toLowerCase().includes(term) ||
-            book.genre.toLowerCase().includes(term)
-        );
-    });
+    const filteredBooks = filterBooks(books, searchTerm);
+
 
     const toggleTheme = () => {
         setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));

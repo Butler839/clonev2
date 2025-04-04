@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './BookDetail.css';
+import { getStarDisplay } from '../utils/reviewHelpers';
+
 
 function BookDetail() {
     const { slug } = useParams();
@@ -86,7 +88,7 @@ function BookDetail() {
                     <ul className="review-list">
                         {reviews.map((review) => (
                             <li key={review.id} className="review-item">
-                                <div className="stars">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</div>
+                                <div className="stars">{getStarDisplay(review.rating)}</div>
                                 <p className="review-text">"{review.content}"</p>
                                 <p className="review-meta">
                                     – {review.reviewer || "Anonymous"} on {new Date(review.createdAt).toLocaleDateString()}
