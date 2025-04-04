@@ -8,20 +8,23 @@ function BookDetail() {
     const [book, setBook] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [error, setError] = useState(false);
+    const [theme, setTheme] = useState('light');
 
     const [reviewer, setReviewer] = useState('');
     const [content, setContent] = useState('');
     const [rating, setRating] = useState(5);
 
     useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
+
+    useEffect(() => {
         fetch(`/api/books/${slug}`)
             .then((res) => {
-                console.log("BOOK STATUS:", res.status);
                 if (!res.ok) throw new Error('Book not found');
                 return res.json();
             })
             .then((data) => {
-                console.log("BOOK DATA:", data);
                 setBook(data);
                 return fetch(`/api/books/${slug}/reviews`);
             })
@@ -32,7 +35,6 @@ function BookDetail() {
                 setError(true);
             });
     }, [slug]);
-
 
     const handleReviewSubmit = (e) => {
         e.preventDefault();
@@ -63,8 +65,13 @@ function BookDetail() {
 
     return (
         <div className="book-detail-wrapper">
-            <div className="book-detail-container">
+            <div className="book-detail-header">
                 <h1>{book.title}</h1>
+                <button onClick={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')} className="theme-toggle">
+                    {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+                </button>
+            </div>
+            <div className="book-detail-container">
                 <p><strong>Author:</strong> {book.author}</p>
                 <p><strong>Genre:</strong> {book.genre}</p>
                 <p className="description">{book.description}</p>

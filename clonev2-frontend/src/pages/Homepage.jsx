@@ -6,6 +6,11 @@ function Homepage({ books }) {
     const [user, setUser] = useState(null);
     const [recentPosts, setRecentPosts] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
+    const [theme, setTheme] = useState('light');
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
 
     useEffect(() => {
         const stored = localStorage.getItem('user');
@@ -13,8 +18,6 @@ function Homepage({ books }) {
         fetch('/api/posts')
             .then(res => res.json())
             .then(data => {
-                console.log("🧪 Post data:", data);
-
                 if (!Array.isArray(data)) throw new Error("Invalid post data");
 
                 const sorted = [...data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -30,12 +33,18 @@ function Homepage({ books }) {
             .catch(err => console.error("Failed to fetch posts:", err));
     }, []);
 
+    const toggleTheme = () => {
+        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    };
 
     return (
         <div className="homepage-container">
             <header className="homepage-header">
                 <h1>📚 Requiem Library</h1>
                 <div className="user-controls">
+                    <button onClick={toggleTheme} className="theme-toggle">
+                        {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+                    </button>
                     {user ? (
                         <>
                             <Link to="/profile" className="profile-link">👤 {user.displayName}</Link>
@@ -129,6 +138,7 @@ function Homepage({ books }) {
 }
 
 export default Homepage;
+
 
 
 

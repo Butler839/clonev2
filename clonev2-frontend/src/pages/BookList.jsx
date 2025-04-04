@@ -5,6 +5,11 @@ import '../components/BookList.css';
 function BookList() {
     const [books, setBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [theme, setTheme] = useState('light');
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
 
     useEffect(() => {
         fetch('/api/books')
@@ -33,11 +38,19 @@ function BookList() {
         );
     });
 
+    const toggleTheme = () => {
+        setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    };
+
     return (
         <div className="booklist-wrapper">
-            <h1 className="booklist-title">📚 Explore the Requiem Library</h1>
+            <div className="booklist-header">
+                <h1 className="booklist-title">📚 Explore the Requiem Library</h1>
+                <button onClick={toggleTheme} className="theme-toggle">
+                    {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+                </button>
+            </div>
 
-            {/* 🔍 Search input */}
             <input
                 type="text"
                 placeholder="Search by title, author, or genre..."
@@ -46,25 +59,16 @@ function BookList() {
                 className="search-bar"
             />
 
-            {/* ✨ Clear button */}
             {searchTerm && (
                 <button className="clear-search" onClick={() => setSearchTerm('')}>
                     Clear
                 </button>
             )}
 
-            {/* 📚 Book grid */}
             <div className="booklist-container">
                 {filteredBooks.map((book) => (
                     <Link to={`/books/${book.slug}`} key={book.id} className="book-card">
-                        <h2
-                            dangerouslySetInnerHTML={{
-                                __html: book.title.replace(
-                                    new RegExp(`(${searchTerm})`, 'gi'),
-                                    (match) => `<mark>${match}</mark>`
-                                ),
-                            }}
-                        />
+                        <h2>{book.title}</h2>
                         <p><strong>Author:</strong> {book.author}</p>
                         <p><strong>Genre:</strong> {book.genre}</p>
                         <p>{book.description.substring(0, 100)}...</p>
@@ -79,5 +83,6 @@ function BookList() {
 }
 
 export default BookList;
+
 
 
