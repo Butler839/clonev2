@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './LibraryWall.css';
 import { Link } from 'react-router-dom';
-
+import { api } from '../utils/api';
 
 function LibraryWall({ books }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +36,7 @@ function LibraryWall({ books }) {
             const parsed = JSON.parse(stored);
             setUser(parsed);
 
-            fetch('/api/posts')
+            api('/api/posts')
                 .then(res => res.json())
                 .then(data => {
                     setPosts(data);
@@ -55,9 +55,8 @@ function LibraryWall({ books }) {
         e.preventDefault();
         const post = { author: user.displayName, content };
 
-        fetch('/api/posts', {
+        api('/api/posts', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(post)
         })
             .then(res => res.json())
@@ -68,7 +67,7 @@ function LibraryWall({ books }) {
     };
 
     const handleLike = (postId) => {
-        fetch(`/api/posts/${postId}/like`, { method: 'POST' })
+        api(`/api/posts/${postId}/like`, { method: 'POST' })
             .then(res => res.json())
             .then(updatedPost => {
                 setPosts(prevPosts =>
@@ -81,7 +80,7 @@ function LibraryWall({ books }) {
 
     const toggleComments = (postId) => {
         if (Array.isArray(comments[postId])) return;
-        fetch(`/api/posts/${postId}/comments`)
+        api(`/api/posts/${postId}/comments`)
             .then(res => res.json())
             .then(data => setComments(prev => ({ ...prev, [postId]: data })))
             .catch(err => console.error('Comment fetch error:', err));
@@ -97,9 +96,8 @@ function LibraryWall({ books }) {
             content: text,
         };
 
-        fetch(`/api/posts/${postId}/comments`, {
+        api(`/api/posts/${postId}/comments`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(comment)
         })
             .then(res => res.json())

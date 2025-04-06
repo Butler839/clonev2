@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import { api } from '../utils/api';
 
 function Homepage({ books }) {
     const [user, setUser] = useState(null);
@@ -15,7 +16,7 @@ function Homepage({ books }) {
     useEffect(() => {
         const stored = localStorage.getItem('user');
 
-        fetch('/api/posts')
+        api('/api/posts')
             .then(res => res.json())
             .then(data => {
                 if (!Array.isArray(data)) throw new Error("Invalid post data");
@@ -138,6 +139,7 @@ function Homepage({ books }) {
 }
 
 export default Homepage;
+
 
 
 

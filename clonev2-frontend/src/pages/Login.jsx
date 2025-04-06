@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// 👇 Base URL pulled from .env file
+const BASE = import.meta.env.VITE_API_BASE_URL;
+
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -9,7 +12,7 @@ function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        fetch('/api/users/login', {
+        fetch(`${BASE}/api/users/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -26,7 +29,7 @@ function Login() {
     };
 
     return (
-        <div style={{padding: '2rem', maxWidth: '400px', margin: 'auto'}}>
+        <div style={{ padding: '2rem', maxWidth: '400px', margin: 'auto' }}>
             <h2>Login</h2>
             <form onSubmit={handleLogin}>
                 <input
@@ -35,7 +38,7 @@ function Login() {
                     value={username}
                     required
                     onChange={(e) => setUsername(e.target.value)}
-                    style={{padding: '0.5rem', width: '100%', marginBottom: '1rem'}}
+                    style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
                 />
                 <input
                     type="password"
@@ -43,7 +46,7 @@ function Login() {
                     value={password}
                     required
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{padding: '0.5rem', width: '100%', marginBottom: '1rem'}}
+                    style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
                 />
                 <button
                     type="submit"
@@ -59,7 +62,7 @@ function Login() {
                     Log In
                 </button>
             </form>
-            <p style={{marginTop: '1rem'}}>
+            <p style={{ marginTop: '1rem' }}>
                 Don’t have an account? <a href="/register">Register here</a>
             </p>
         </div>
@@ -67,3 +70,4 @@ function Login() {
 }
 
 export default Login;
+

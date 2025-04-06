@@ -7,13 +7,13 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import BookList from './pages/BookList';
-
+import { api } from './utils/api';
 
 function App() {
     const [books, setBooks] = useState([]);
 
     useEffect(() => {
-        fetch('/api/books')
+        api('/api/books')
             .then((res) => res.json())
             .then(setBooks)
             .catch((err) => console.error("Failed to fetch books:", err));

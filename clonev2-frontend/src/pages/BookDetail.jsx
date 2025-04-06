@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './BookDetail.css';
 import { getStarDisplay } from '../utils/reviewHelpers';
-
+import { api } from '../utils/api';
 
 function BookDetail() {
     const { slug } = useParams();
@@ -21,14 +21,14 @@ function BookDetail() {
     }, [theme]);
 
     useEffect(() => {
-        fetch(`/api/books/${slug}`)
+        api(`/api/books/${slug}`)
             .then((res) => {
                 if (!res.ok) throw new Error('Book not found');
                 return res.json();
             })
             .then((data) => {
                 setBook(data);
-                return fetch(`/api/books/${slug}/reviews`);
+                return api(`/api/books/${slug}/reviews`);
             })
             .then((res) => res.json())
             .then(setReviews)
@@ -47,9 +47,8 @@ function BookDetail() {
             rating: parseInt(rating),
         };
 
-        fetch(`/api/books/${slug}/reviews`, {
+        api(`/api/books/${slug}/reviews`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(reviewData),
         })
             .then((res) => res.json())
@@ -136,6 +135,7 @@ function BookDetail() {
 }
 
 export default BookDetail;
+
 
 
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../components/BookList.css';
 import { filterBooks } from '../utils/bookHelpers';
+import { api } from '../utils/api';
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -13,7 +14,7 @@ function BookList() {
     }, [theme]);
 
     useEffect(() => {
-        fetch('/api/books')
+        api('/api/books')
             .then((res) => res.json())
             .then((data) => setBooks(data))
             .catch((err) => console.error("Error fetching books:", err));
@@ -31,7 +32,6 @@ function BookList() {
     }, []);
 
     const filteredBooks = filterBooks(books, searchTerm);
-
 
     const toggleTheme = () => {
         setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -78,6 +78,7 @@ function BookList() {
 }
 
 export default BookList;
+
 
 
 

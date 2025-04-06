@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../utils/api';
 
 function Register() {
     const [form, setForm] = useState({
@@ -18,9 +19,8 @@ function Register() {
     const handleRegister = (e) => {
         e.preventDefault();
 
-        fetch('/api/users', {
+        api('/api/users', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(form),
         })
             .then((res) => {
@@ -59,3 +59,4 @@ const buttonStyle = {
 };
 
 export default Register;
+

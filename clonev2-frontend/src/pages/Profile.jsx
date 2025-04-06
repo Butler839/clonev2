@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ProfileStyles.css';
 import { Link } from 'react-router-dom';
+import { api } from '../utils/api';
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ function Profile() {
             setUser(parsed);
             setNewDisplayName(parsed.displayName);
 
-            fetch('/api/posts')
+            api('/api/posts')
                 .then(res => res.json())
                 .then(data => {
                     const filtered = data.filter(p => p.author === parsed.displayName);
@@ -26,9 +27,8 @@ function Profile() {
     }, []);
 
     const handleDisplayNameUpdate = () => {
-        fetch(`/api/users/${user.username}`, {
+        api(`/api/users/${user.username}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ displayName: newDisplayName }),
         })
             .then(res => res.json())
@@ -57,7 +57,6 @@ function Profile() {
                 />
                 <h2 className="profile-title">👤 {user.displayName}'s Profile</h2>
             </div>
-
 
             <div className="profile-info">
                 <p><strong>Username:</strong> {user.username}</p>
@@ -101,5 +100,6 @@ function Profile() {
 }
 
 export default Profile;
+
 
 
