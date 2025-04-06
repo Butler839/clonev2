@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// 👇 Base URL pulled from .env file
-const BASE = import.meta.env.VITE_API_BASE_URL;
+import { api } from '../utils/api';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -12,10 +10,9 @@ function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        fetch(`${BASE}/api/users/login`, {
+        api('/api/users/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password })
         })
             .then(res => {
                 if (!res.ok) throw new Error('Invalid credentials');
@@ -70,4 +67,5 @@ function Login() {
 }
 
 export default Login;
+
 
