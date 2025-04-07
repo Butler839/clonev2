@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import BookList from './pages/BookList';
-import { api } from './utils/api';
+import { api } from './utils/api.js';
 
 function App() {
     const [books, setBooks] = useState([]);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './BookDetail.css';
-import { getStarDisplay } from '../utils/reviewHelpers';
-import { api } from '../utils/api';
+import { getStarDisplay } from '../utils/reviewHelpers.js';
+import { api } from '../utils/api.js';
 
 function BookDetail() {
     const { slug } = useParams();

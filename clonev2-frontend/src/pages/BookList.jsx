@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../components/BookList.css';
-import { filterBooks } from '../utils/bookHelpers';
-import { api } from '../utils/api';
+import { filterBooks } from '../utils/bookHelpers.js';
+import { api } from '../utils/api.js';
 
 function BookList() {
     const [books, setBooks] = useState([]);

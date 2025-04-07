@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ProfileStyles.css';
 import { Link } from 'react-router-dom';
-import { api } from '../utils/api';
+import { api } from '../utils/api.js';
 
 function Profile() {
     const [user, setUser] = useState(null);
