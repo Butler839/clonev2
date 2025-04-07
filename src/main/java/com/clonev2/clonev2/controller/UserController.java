@@ -47,11 +47,14 @@ public class UserController {
         try {
             User saved = service.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
             System.err.println("⚠️ Failed to create user: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create user");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server error");
         }
     }
+
 
     // ✅ Login endpoint
     @PostMapping("/login")
