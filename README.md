@@ -6,8 +6,8 @@ A full-stack book discovery and social review platform built using **React + Vit
 
 ## Live Demo (optional)
 
-**Frontend:** [Netlify/Vercel URL here]  
-**Backend:** [Heroku URL here]
+**Frontend:** (https://clonev2-jm7v.vercel.app/)  
+**Backend:** https://boiling-dawn-30287-3780ff100e79.herokuapp.com/
 
 ---
 
@@ -43,7 +43,7 @@ A full-stack book discovery and social review platform built using **React + Vit
 ### DevOps:
 - Git + GitHub
 - Heroku (backend deployment)
-- Netlify or Vercel (frontend deployment)
+- Vercel (frontend deployment)
 
 ---
 
@@ -66,18 +66,3 @@ cd clonev2-frontend
 npm install
 npm run dev
 ```
-
----
-
-## 📸 Screenshots (optional)
-Include screenshots of:
-- Library Wall
-- Profile Page
-- Light/Dark Theme toggle
-
----
-
-## 📦 Deployment Notes
-- Frontend should be deployed on [Netlify/Vercel]
-- Backend deploys to [Heroku] with PostgreSQL add-on
-- Use environment variables for DB configs and CORS whitelist
