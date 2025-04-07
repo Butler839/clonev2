@@ -16,7 +16,7 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:5173",
-                                "https://clonev2-jm7v-1xaf4o7da-rays-projects-3e7a23c5.vercel.app/"  // 🔁 update this!
+                                "https://clonev2-jm7v.vercel.app/"  // 🔁 update this!
                         )
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
