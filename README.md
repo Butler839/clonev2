@@ -66,3 +66,11 @@ cd clonev2-frontend
 npm install
 npm run dev
 ```
+### Create .env file
+```
+VITE_API_BASE_URL=http://localhost:8080
+```
+### update api.js
+```
+const BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080').replace(/\/+$/, '');  #change top line
+```
